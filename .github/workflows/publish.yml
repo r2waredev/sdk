@@ -1,0 +1,50 @@
+# Publish @r2ware/sdk to npm on a version tag (vX.Y.Z).
+#
+# Uses npm trusted publishing (OIDC): GitHub mints a short-lived token per run
+# and exchanges it with npm — no NPM_TOKEN secret to store, rotate, or leak.
+# Publishing this way also attaches signed provenance automatically.
+#
+# One-time setup on npmjs.com: under the @r2ware/sdk package Settings, add a
+# trusted publisher pointing at r2waredev/sdk and this workflow (publish.yml).
+# The package must already exist, so the FIRST release is a manual `npm publish`
+# from a maintainer's machine; every release after that runs here, token-free.
+#
+# The published version is derived from the git tag — never hand-maintained in
+# package.json (it stays 0.0.0 in the repo). Consumers load exact versions via
+# jsDelivr: https://cdn.jsdelivr.net/npm/@r2ware/sdk@X.Y.Z/dist/r2ware.min.js
+name: publish
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm trusted publishing (OIDC)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      # OIDC trusted publishing needs npm >= 11.5.1; Node 20 ships npm 10.x.
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - name: Set version from tag
+        run: npm version --no-git-tag-version --allow-same-version "${GITHUB_REF_NAME#v}"
+
+      - run: npm run build
+
+      # No NODE_AUTH_TOKEN: npm detects the OIDC environment and authenticates
+      # via the trusted publisher. --provenance is implied but set explicitly.
+      - name: Publish to npm
+        run: npm publish --access public --provenance

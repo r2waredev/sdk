@@ -1,0 +1,47 @@
+{
+  "name": "@r2ware/sdk",
+  "version": "0.0.0",
+  "description": "Zero-dependency JavaScript SDK for adding r2ware platform features — forms, shop, e-signatures, sharing — to any static website.",
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/r2ware.min.js",
+  "exports": {
+    ".": "./dist/r2ware.min.js",
+    "./style": "./dist/r2ware.min.css",
+    "./dist/*": "./dist/*"
+  },
+  "style": "dist/r2ware.min.css",
+  "sideEffects": true,
+  "scripts": {
+    "build": "node build.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r2waredev/sdk.git"
+  },
+  "homepage": "https://github.com/r2waredev/sdk#readme",
+  "bugs": {
+    "url": "https://github.com/r2waredev/sdk/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "r2ware",
+    "sdk",
+    "vanilla-js",
+    "zero-dependency",
+    "static-site",
+    "jekyll",
+    "forms",
+    "ecommerce",
+    "e-signature"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
