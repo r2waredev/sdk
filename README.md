@@ -3,7 +3,7 @@
 Zero-dependency JavaScript SDK for adding r2ware platform features — **forms**,
 **shop**, **e-signatures**, and **sharing** — to any static website.
 
-- **Vanilla JS, no dependencies.** No Stimulus, no Bootstrap, no icon fonts.
+- **Vanilla JS, no dependencies.** No frameworks, no design systems, no icon fonts.
 - **One small bundle** (~19 KB JS, ~1 KB CSS). Each widget self-gates on its own
   markup, so the SDK stays inert until a page actually uses a feature.
 - **Markup-driven.** Drop in `data-r2-*` attributes; no JavaScript to write.
