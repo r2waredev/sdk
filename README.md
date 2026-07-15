@@ -106,14 +106,19 @@ endpoint with `data-r2-uploads-url`.
 The package version is derived from the git tag at release time — pushing a
 `vX.Y.Z` tag triggers the GitHub Actions `publish` workflow, which builds and
 publishes to npm via **trusted publishing** (OIDC, no stored token; signed
-provenance attached automatically). `package.json` stays at `0.0.0` in the repo
-on purpose.
+provenance attached automatically). The `version` field in `package.json` is a
+placeholder the workflow overwrites from the tag, so it is never hand-maintained
+for releases.
 
-> First release only: trusted publishing is configured under the package's npm
-> settings, which requires the package to exist — so publish `v0.1.0` once
-> manually (`npm publish --access public` with your 2FA), then add the trusted
-> publisher (`r2waredev/sdk` → `publish.yml`) so every later tag publishes here
-> token-free.
+Trusted publishing is configured on the `@r2ware/sdk` package (npmjs.com →
+package Settings → trusted publisher: `r2waredev/sdk` → `publish.yml`). The
+first release (`v0.1.0`) was published manually so the package would exist;
+every release since then publishes from CI token-free. To cut a release:
+
+```sh
+git tag vX.Y.Z
+git push origin vX.Y.Z   # triggers the publish workflow
+```
 
 ## Develop
 
